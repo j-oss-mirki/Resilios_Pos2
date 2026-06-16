@@ -1,17 +1,22 @@
 services:
   api:
-    build: ./backend
+    build: ./backend  # ✅ Ruta correcta: desde edge/ hasta backend/
     container_name: resilios-edge-api
     ports:
-      - "3000:3000"  # ✅ API SIEMPRE en el 3000
+      - "3000:3000"  # ✅ PUERTO ESTÁNDAR 4.4
     volumes:
+      # Código sincronizado
       - ./backend:/app
-      - ./data:/app/data
+      # 📁 PERSISTENCIA DE DATOS (WP-2.1)
+      # Apunta a la carpeta data/ que ya tienes creada ahí
+      - ./data:/app/data 
     environment:
       - RAILS_ENV=production
+      # ✅ RUTA DE BASE DE DATOS COINCIDE CON VOLUMEN
       - DATABASE_URL=sqlite3:///app/data/production.sqlite3
       - SECRET_KEY_BASE=resilios_clave_secreta_2026_muy_larga_y_segura_123456789
       - BUNDLE_WITHOUT=development:test
+    # ✅ HEALTHCHECK OBLIGATORIO (WP-1.2 / 4.4)
     healthcheck:
       test: ["CMD-SHELL", "curl -s http://localhost:3000/up > /dev/null || exit 1"]
       interval: 5s
@@ -20,10 +25,10 @@ services:
     restart: always
 
   frontend:
-    build: ./frontend
+    build: ./frontend # ✅ Ruta correcta: desde edge/ hasta frontend/
     container_name: resilios-edge-frontend
     ports:
-      - "80:80"  # ✅ FRONTEND SIEMPRE en el 80
+      - "80:80"  # ✅ PUERTO ESTÁNDAR 4.4
     depends_on:
       - api
     restart: always

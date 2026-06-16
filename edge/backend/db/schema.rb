@@ -10,24 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_10_200202) do
-# Could not dump table "order_items" because of following StandardError
-#   Unknown type 'uuid' for column 'id'
+ActiveRecord::Schema[8.1].define(version: 2026_06_16_204642) do
+  create_table "orders", id: { type: :string, limit: 26 }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "status", default: "pending", null: false
+    t.integer "table_number", null: false
+    t.decimal "total_amount", precision: 10, scale: 2, null: false
+    t.datetime "updated_at", null: false
+    t.string "waiter_name", null: false
+  end
 
-
-# Could not dump table "orders" because of following StandardError
-#   Unknown type 'uuid' for column 'id'
-
-
-# Could not dump table "products" because of following StandardError
-#   Unknown type 'uuid' for column 'id'
-
-
-# Could not dump table "sync_operations" because of following StandardError
-#   Unknown type 'uuid' for column 'id'
-
-
-# Could not dump table "tables" because of following StandardError
-#   Unknown type 'uuid' for column 'id'
-
+  create_table "sync_operations", id: { type: :string, limit: 26 }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.json "data"
+    t.string "entity_id", null: false
+    t.string "entity_type", null: false
+    t.string "operation", null: false
+    t.integer "retry_count", default: 0
+    t.boolean "synced", default: false
+    t.datetime "synced_at"
+    t.datetime "updated_at", null: false
+    t.index ["synced", "entity_type"], name: "index_sync_operations_on_synced_and_entity_type"
+  end
 end

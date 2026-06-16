@@ -27,8 +27,12 @@ RUN bundle install --jobs 4
 # Copiamos todo el código
 COPY . .
 
+# ✅ NUEVO: Precompilar activos (necesario en producción)
+#RUN rails assets:precompile RAILS_ENV=production
+
 # Puerto de la API
 EXPOSE 3000
 
-# Comando de inicio (igual que en tu plan)
-CMD ["rails", "server", "-b", "0.0.0.0"]
+# ✅ NUEVO: Comando que ejecuta migraciones y levanta servidor
+# Garantiza que la BD esté actualizada cada vez que arranca
+CMD ["sh", "-c", "rails db:migrate RAILS_ENV=production && rails server -b 0.0.0.0 -p 3000"]

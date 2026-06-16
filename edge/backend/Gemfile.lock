@@ -309,7 +309,7 @@ DEPENDENCIES
   sqlite3 (>= 2.1)
   thruster
   tzinfo-data
-  ulid
+  ulid (~> 1.0)
 
 BUNDLED WITH
    2.5.22
