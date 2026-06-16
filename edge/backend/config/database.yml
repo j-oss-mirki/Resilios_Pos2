@@ -1,0 +1,21 @@
+default: &default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+  # 👇 CONFIGURACIÓN OBLIGATORIA SEGÚN TUS ESTÁNDARES
+  journal_mode: WAL
+  synchronous: NORMAL
+  cache_size: -2000
+
+development:
+  <<: *default
+  # Guardamos la BD en la carpeta data que creamos (persiste fuera del contenedor)
+  database: ../data/development.sqlite3
+
+test:
+  <<: *default
+  database: ../data/test.sqlite3
+
+production:
+  <<: *default
+  database: ../data/production.sqlite3
